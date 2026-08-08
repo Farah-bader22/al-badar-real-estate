@@ -114,13 +114,14 @@
 
   </div>
 </template>
-
 <script>
 import { ref } from 'vue'
-import { supabase } from '../supabase' // تأكدي إنو مسار ملف السوبابيس صحيح عندك
+import { useRouter } from 'vue-router' // <--- 1. استيراد الموجه
+import { supabase } from '../supabase'
 
 export default {
   setup() {
+    const router = useRouter() // <--- 2. تفعيل الموجه
     const loading = ref(false)
     const message = ref('')
     const messageType = ref('')
@@ -152,11 +153,13 @@ export default {
 
         if (error) throw error
 
-        message.value = 'تم إنشاء الحساب بنجاح! (إذا طلب تأكيد، تفقدي إيميلك)'
+        message.value = 'تم إنشاء الحساب بنجاح!'
         messageType.value = 'success'
 
-        // تنظيف الفورم بعد النجاح
-        form.value = { firstName: '', lastName: '', email: '', password: '', city: '' }
+        // 3. التوجيه تلقائياً للرئيسية بعد النجاح بفترة قصيرة
+        setTimeout(() => {
+          router.push('/home')
+        }, 1000)
 
       } catch (err) {
         message.value = 'حدث خطأ أثناء التسجيل: ' + err.message

@@ -130,7 +130,6 @@
 
   </div>
 </template>
-
 <script>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -167,9 +166,9 @@ export default {
         message.value = 'تم تسجيل الدخول بنجاح!'
         messageType.value = 'success'
         
-        // التوجيه تلقائياً للصفحة الرئيسية بعد النجاح بفترة قصيرة
+        // التوجيه للوحة التحكم/الرئيسية الجديدة بعد النجاح
         setTimeout(() => {
-          router.push('/')
+          router.push('/home') // <--- تم التعديل هنا ليوجهها للرئيسية الصحيحة
         }, 1000)
 
       } catch (err) {
@@ -180,9 +179,9 @@ export default {
       }
     }
 
-    // دالة تصفح كضيف لتنتقل للرئيسية مباشرة
+    // دالة تصفح كضيف لتنتقل للرئيسية أيضاً
     const continueAsGuest = () => {
-      router.push('/')
+      router.push('/home') // <--- وتم التعديل هنا أيضاً
     }
 
     return { 
