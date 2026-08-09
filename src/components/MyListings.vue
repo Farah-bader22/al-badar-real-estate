@@ -88,9 +88,12 @@
 <script>
 import { ref, onMounted } from 'vue'
 import { supabase } from '../supabase'
+import { useToast } from "vue-toastification"
+import Swal from 'sweetalert2'
 
 export default {
   setup() {
+    const toast = useToast()
     const listings = ref([])
     const loading = ref(true)
 
@@ -114,13 +117,34 @@ export default {
         listings.value = data || []
       } catch (err) {
         console.error('خطأ في جلب المنشورات:', err.message)
+        toast.error('حدث خطأ أثناء جلب إعلاناتك.')
       } finally {
         loading.value = false
       }
     }
 
     const deleteListing = async (id) => {
-      if (!confirm('هل أنت متأكد من رغبتك في حذف هذا الإعلان؟')) return
+      // نافذة مخصصة بحجم أصغر وتصميم أنيق متناسق
+      const result = await Swal.fire({
+        title: 'هل تريد حذف الإعلان؟',
+        text: "لن يمكنك التراجع بعد الحذف",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444', // أحمر هادئ
+        cancelButtonColor: '#9ca3af',   // رمادي هادئ
+        confirmButtonText: 'نعم، احذفه',
+        cancelButtonText: 'إلغاء',
+        width: '320px', // تصغير عرض النافذة بالكامل
+        customClass: {
+          popup: 'text-sm rounded-2xl p-4',
+          title: 'text-lg font-bold',
+          htmlContainer: 'text-xs text-gray-500',
+          confirmButton: 'px-4 py-2 text-xs rounded-lg',
+          cancelButton: 'px-4 py-2 text-xs rounded-lg'
+        }
+      })
+
+      if (!result.isConfirmed) return
 
       try {
         const { error } = await supabase
@@ -131,9 +155,9 @@ export default {
         if (error) throw error
 
         listings.value = listings.value.filter(item => item.id !== id)
-        alert('تم حذف الإعلان بنجاح.')
+        toast.success('تم حذف الإعلان بنجاح.')
       } catch (err) {
-        alert('فشل حذف الإعلان: ' + err.message)
+        toast.error('فشل حذف الإعلان: ' + err.message)
       }
     }
 

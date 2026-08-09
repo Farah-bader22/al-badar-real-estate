@@ -18,6 +18,7 @@
             <span class="font-bold text-slate-900 text-lg tracking-tight">البدر للعقارات</span>
           </div>
 
+
           <!-- زر الإغلاق -->
           <button @click="$emit('close')" class="text-slate-400 hover:text-[#b89735] p-2 rounded-xl hover:bg-amber-50 transition-all duration-200 cursor-pointer">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,7 +26,10 @@
             </svg>
           </button>
           
+          
         </div>
+
+        
 
         <!-- بطاقة معلومات المستخدم (الملف الشخصي) -->
         <div class="mt-6 bg-gradient-to-br from-amber-50/50 via-white to-white border border-amber-200/60 rounded-2xl p-4 flex items-center justify-between shadow-sm">
@@ -97,6 +101,8 @@
         </div>
       </div>
 
+
+
       <!-- زر تسجيل الخروج -->
       <div class="pt-4 border-t border-amber-100 mt-6">
         <button @click="handleLogout" class="w-full flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl border border-red-100 bg-red-50/50 hover:bg-red-100/70 text-red-600 font-semibold transition-all duration-200 cursor-pointer shadow-xs">
@@ -105,7 +111,14 @@
           </svg>
           <span class="text-sm">تسجيل الخروج</span>
         </button>
+        <div class="text-center mt-5 mb-2">
+  <p class="text-xs font-semibold text-gray-500 tracking-wide">
+    إعداد: المهندسة فرح محمد بدر
+  </p>
+</div>
       </div>
+
+
 
     </div>
   </div>
@@ -150,7 +163,7 @@ export default {
     const handleLogout = async () => {
       await supabase.auth.signOut()
       emit('close')
-      router.push('/login')
+      router.push('/')
     }
 
     return { 

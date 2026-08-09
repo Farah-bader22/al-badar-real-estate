@@ -172,7 +172,8 @@ export default {
         }, 1000)
 
       } catch (err) {
-        message.value = 'خطأ في البيانات المدخلة: ' + err.message
+        console.error("خطأ من سوبابيس بالتفصيل:", err) // هذا سيطبع لك الخطأ كاملاً في الـ Console
+        message.value = 'خطأ: ' + (err.message || 'حدث خطأ غير معروف')
         messageType.value = 'error'
       } finally {
         loading.value = false

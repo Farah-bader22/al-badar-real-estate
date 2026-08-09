@@ -84,13 +84,39 @@
             <template v-if="formType === 'offer'">
               <div class="space-y-1.5">
                 <label class="text-xs font-bold text-slate-800">عنوان الإعلان *</label>
-                <input v-model="formData.title" type="text" placeholder="مثال: شقة 3 غرف في رام الله" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] transition-all" />
+                <input v-model="formData.title" type="text" placeholder="مثال: شقة 3 غرف في غزة" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] transition-all" />
               </div>
 
-              <div class="space-y-1.5">
-                <label class="text-xs font-bold text-slate-800">السعر (₪) *</label>
-                <input v-model="formData.price" type="number" placeholder="أدخل السعر" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] transition-all" />
-              </div>
+             <div class="space-y-1.5">
+  <div class="flex items-center justify-between">
+    <label class="text-xs font-bold text-slate-800">السعر (اختياري)</label>
+    <!-- خيار تحديد العملة -->
+    <div class="flex items-center gap-1 bg-slate-100 p-0.5 rounded-lg border border-slate-200">
+      <button 
+        type="button" 
+        @click="formData.currency = 'ILS'"
+        :class="formData.currency === 'ILS' ? 'bg-white text-[#9C7A2E] shadow-xs' : 'text-slate-500 hover:text-slate-800'"
+        class="px-2 py-0.5 text-xs font-bold rounded-md transition-all cursor-pointer">
+        ₪ شيكل
+      </button>
+      <button 
+        type="button" 
+        @click="formData.currency = 'USD'"
+        :class="formData.currency === 'USD' ? 'bg-white text-[#9C7A2E] shadow-xs' : 'text-slate-500 hover:text-slate-800'"
+        class="px-2 py-0.5 text-xs font-bold rounded-md transition-all cursor-pointer">
+        $ دولار
+      </button>
+    </div>
+  </div>
+  
+  <!-- حقل إدخال السعر (بدون علامة * لأنه صار اختياري) -->
+  <input 
+    v-model="formData.price" 
+    type="number" 
+    placeholder="أدخل السعر (اختياري)" 
+    class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] transition-all" 
+  />
+</div>
 
               <!-- خانة الصورة -->
               <div class="space-y-1.5">
@@ -111,24 +137,25 @@
                 <input v-model="formData.address" type="text" placeholder="الحي أو الشارع..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] transition-all" />
               </div>
 
-              <div class="space-y-1.5">
-                <label class="text-xs font-bold text-slate-800">رقم التواصل *</label>
-                <div class="flex gap-2" dir="ltr">
-                  <input v-model="formData.phone" type="text" placeholder="59XXXXXXX" class="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] text-right transition-all" />
-                  <select v-model="formData.countryCode" class="bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] cursor-pointer">
-                    <option value="+970">+970 🇵🇸</option>
-                    <option value="+962">+962 🇯🇴</option>
-                    <option value="+966">+966 🇸🇦</option>
-                    <option value="+971">+971 🇦🇪</option>
-                    <option value="+974">+974 🇶🇦</option>
-                    <option value="+965">+965 🇰🇼</option>
-                    <option value="+973">+973 🇧🇭</option>
-                    <option value="+968">+968 🇴🇲</option>
-                    <option value="+20">+20 🇪🇬</option>
-                    <option value="+1">+1 🇺🇸</option>
-                  </select>
-                </div>
-              </div>
+            <div class="space-y-1.5">
+  <label class="text-xs font-bold text-slate-800">رقم التواصل *</label>
+  <div class="flex gap-2" dir="ltr">
+    <input v-model="formData.phone" type="text" placeholder="59XXXXXXX" class="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] text-right transition-all" />
+    <select v-model="formData.countryCode" class="bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] cursor-pointer">
+      <option value="+970">+970 🇵🇸</option>
+      <option value="+972">+972 🇵🇸</option>
+      <option value="+962">+962 🇯🇴</option>
+      <option value="+966">+966 🇸🇦</option>
+      <option value="+971">+971 🇦🇪</option>
+      <option value="+974">+974 🇶🇦</option>
+      <option value="+965">+965 🇰🇼</option>
+      <option value="+973">+973 🇧🇭</option>
+      <option value="+968">+968 🇴🇲</option>
+      <option value="+20">+20 🇪🇬</option>
+      <option value="+1">+1 🇺🇸</option>
+    </select>
+  </div>
+</div>
 
               <div class="space-y-1.5">
                 <label class="text-xs font-bold text-slate-800">المساحة (م²) *</label>
@@ -138,16 +165,16 @@
 
             <!-- الحالة الثانية: أبحث عن عقار (request) -->
             <template v-else>
-              <div class="space-y-1.5">
-                <label class="text-xs font-bold text-slate-800">المدينة *</label>
-                <select v-model="formData.city" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] transition-all">
-                  <option value="">اختر المدينة</option>
-                  <option value="رام الله">رام الله</option>
-                  <option value="نابلس">نابلس</option>
-                  <option value="الخليل">الخليل</option>
-                  <option value="بيت لحم">بيت لحم</option>
-                </select>
-              </div>
+<div class="space-y-1.5">
+  <label class="text-xs font-bold text-slate-800">المدينة *</label>
+  <select v-model="formData.city" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] transition-all">
+    <option value="">اختر المنطقة</option>
+    <option value="شمال غزة">شمال غزة</option>
+    <option value="غزة">غزة</option>
+    <option value="وسط غزة">وسط غزة</option>
+    <option value="جنوب غزة">جنوب غزة</option>
+  </select>
+</div>
 
               <div class="space-y-1.5">
                 <label class="text-xs font-bold text-slate-800">رقم التواصل *</label>
@@ -155,6 +182,7 @@
                   <input v-model="formData.phone" type="text" placeholder="59XXXXXXX" class="flex-1 bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] text-right transition-all" />
                   <select v-model="formData.countryCode" class="bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm focus:outline-none focus:border-[#9C7A2E] cursor-pointer">
                     <option value="+970">+970 🇵🇸</option>
+                          <option value="+972">+972 🇵🇸</option>
                     <option value="+962">+962 🇯🇴</option>
                     <option value="+966">+966 🇸🇦</option>
                     <option value="+971">+971 🇦🇪</option>
@@ -211,11 +239,10 @@
 }
 </style>
 
-
-
 <script>
 import { ref, reactive, watch } from 'vue'
 import { supabase } from '../supabase.js'
+import { useToast } from "vue-toastification"
 
 export default {
   props: {
@@ -226,11 +253,11 @@ export default {
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
+    const toast = useToast()
     const wizardStep = ref(1)
     const formType = ref('offer') 
     const loading = ref(false)
 
-    // متغيرات رفع وصورة الجهاز
     const imageFile = ref(null)
     const imagePreview = ref(null)
 
@@ -247,7 +274,6 @@ export default {
       image: ''
     })
 
-    // دالة التقاط ملف الصورة من جهاز المستخدم وعمل معاينة لها
     const handleImageUpload = (event) => {
       const file = event.target.files[0]
       if (file) {
@@ -256,7 +282,6 @@ export default {
       }
     }
 
-    // دالة رفع الصورة إلى سحابة Supabase واستخراج الرابط العام
     const uploadImageToSupabase = async () => {
       if (!imageFile.value) return formData.image || null
       
@@ -279,7 +304,7 @@ export default {
         return data.publicUrl
       } catch (error) {
         console.error('خطأ أثناء رفع الصورة:', error.message)
-        alert('فشل رفع الصورة، سيتم النشر بدونها أو بالرابط القديم.')
+        toast.warning('فشل رفع الصورة، سيتم النشر بدونها أو بالرابط القديم.')
         return formData.image || null
       }
     }
@@ -327,16 +352,14 @@ export default {
 
       loading.value = true
       try {
-        // 1. جلب المستخدم الحقيقي المسجل حالياً في المنصة
         const { data: { user }, error: userError } = await supabase.auth.getUser()
 
         if (userError || !user) {
-          alert('الرجاء تسجيل الدخول بحسابك الحقيقي أولاً لكي يتم نشر الإعلان باسمك مباشرة!')
+          toast.error('الرجاء تسجيل الدخول بحسابك الحقيقي أولاً لكي يتم نشر الإعلان باسمك مباشرة!')
           loading.value = false
           return
         }
 
-        // 2. استخراج الاسم الحقيقي للمستخدم من بيانات حسابه
         const firstName = user.user_metadata?.first_name || ''
         const lastName = user.user_metadata?.last_name || ''
         const metadataName = user.user_metadata?.name || ''
@@ -347,10 +370,8 @@ export default {
           
         const firstLetter = realOwnerName.charAt(0) || 'م'
 
-        // 3. رفع الصورة إلى السحابة
         const finalImageUrl = await uploadImageToSupabase()
 
-        // 4. الحفظ في قاعدة البيانات مع جعل الصورة null إذا كان النوع request (طلب)
         const { error } = await supabase
           .from('properties')
           .insert([
@@ -373,11 +394,11 @@ export default {
 
         if (error) throw error
 
-        alert('تم النشر بنجاح!')
+        toast.success('تم النشر بنجاح!')
         close()
       } catch (err) {
         console.error('خطأ أثناء النشر:', err.message)
-        alert('حدث خطأ أثناء النشر: ' + err.message)
+        toast.error('حدث خطأ أثناء النشر: ' + err.message)
       } finally {
         loading.value = false
       }
@@ -391,14 +412,14 @@ export default {
       }
     }
 
-  const propertyTypes = ref([
-  { name: 'شقة', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>' },
-  { name: 'بيت', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>' },
-  { name: 'شاليه', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>' },
-  { name: 'أرض', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>' },
-  { name: 'محل', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>' },
-  { name: 'مكتب', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>' }
-])
+    const propertyTypes = ref([
+      { name: 'شقة', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>' },
+      { name: 'بيت', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>' },
+      { name: 'شاليه', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>' },
+      { name: 'أرض', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>' },
+      { name: 'محل', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>' },
+      { name: 'مكتب', svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>' }
+    ])
 
     return {
       wizardStep,

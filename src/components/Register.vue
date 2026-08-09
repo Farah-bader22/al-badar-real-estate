@@ -11,12 +11,32 @@
       <p class="text-[#C5A059] text-xs mt-1.5 font-bold tracking-widest uppercase">بوابتك الأولى لعقارات المستقبل</p>
     </div>
 
-    <!-- الكارد الأساسي بتصميم زجاجي נاصع -->
+    <!-- الكارد الأساسي بتصميم زجاجي ناصع -->
     <div class="max-w-xl w-full bg-white/90 backdrop-blur-xl border border-slate-200/80 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 p-8 sm:p-10 relative z-10">
       
       <div class="text-right mb-6 border-b border-slate-100 pb-4">
         <h2 class="text-xl font-black text-slate-900">إنشاء حساب جديد</h2>
         <p class="text-slate-400 text-xs mt-1 font-medium">سجل بياناتك وانضم إلى عائلة البدر فوراً</p>
+      </div>
+
+      <!-- تبديل طرق التسجيل (هاتف / بريد) -->
+      <div class="flex bg-slate-100 p-1.5 rounded-2xl mb-6 border border-slate-200/60 shadow-inner">
+        <button 
+          type="button" 
+          @click="registerType = 'phone'"
+          :class="registerType === 'phone' ? 'bg-white text-[#C5A059] shadow-md font-extrabold scale-[1.02]' : 'text-slate-500 font-semibold hover:text-slate-800'"
+          class="flex-1 py-3 text-xs rounded-xl transition-all duration-300 cursor-pointer"
+        >
+          رقم الهاتف
+        </button>
+        <button 
+          type="button" 
+          @click="registerType = 'email'"
+          :class="registerType === 'email' ? 'bg-white text-[#C5A059] shadow-md font-extrabold scale-[1.02]' : 'text-slate-500 font-semibold hover:text-slate-800'"
+          class="flex-1 py-3 text-xs rounded-xl transition-all duration-300 cursor-pointer"
+        >
+          البريد الإلكتروني
+        </button>
       </div>
 
       <form @submit.prevent="registerUser" class="space-y-4">
@@ -45,8 +65,8 @@
           </div>
         </div>
 
-        <!-- البريد الإلكتروني -->
-        <div>
+        <!-- حقل البريد الإلكتروني (يظهر إذا اختار بريد) -->
+        <div v-if="registerType === 'email'">
           <label class="block text-xs font-bold text-slate-700 mb-1.5">البريد الإلكتروني</label>
           <input 
             v-model="form.email" 
@@ -56,6 +76,33 @@
             class="w-full px-4 py-3.5 rounded-2xl bg-slate-50/50 border border-slate-200/80 focus:border-[#C5A059] focus:ring-4 focus:ring-[#C5A059]/10 outline-none text-sm text-slate-800 transition duration-300 text-left font-medium" 
             dir="ltr" 
           />
+        </div>
+
+        <!-- حقل رقم الهاتف (يظهر إذا اختار هاتف) -->
+        <div v-else>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">رقم الهاتف</label>
+          <div class="flex items-center border border-slate-200/80 rounded-2xl overflow-hidden bg-slate-50/50 focus-within:border-[#C5A059] focus-within:ring-4 focus-within:ring-[#C5A059]/10 transition duration-300">
+            <select 
+              v-model="form.countryCode" 
+              class="bg-slate-100/80 border-l border-slate-200 px-3.5 py-3.5 text-xs font-bold outline-none text-center cursor-pointer text-slate-700 hover:bg-slate-200/50 transition"
+            >
+              <option value="+970">🇵🇸 +970</option>
+              <option value="+972">🇵🇸 +972</option>
+              <option value="+962">🇯🇴 +962</option>
+              <option value="+966">🇸🇦 +966</option>
+              <option value="+971">🇦🇪 +971</option>
+              <option value="+20">🇪🇬 +20</option>
+              <option value="+1">🇺🇸 +1</option>
+            </select>
+            <input 
+              v-model="form.phone" 
+              type="text" 
+              placeholder="59XXXXXXX" 
+              required
+              class="w-full px-4 py-3.5 outline-none bg-transparent text-sm text-left text-slate-800 font-medium" 
+              dir="ltr"
+            />
+          </div>
         </div>
 
         <!-- كلمة المرور -->
@@ -87,7 +134,7 @@
           </select>
         </div>
 
-        <!-- زر التسجيل (ذهبي ملكي مع تأثير حركي) -->
+        <!-- زر التسجيل -->
         <button 
           type="submit" 
           :disabled="loading" 
@@ -114,14 +161,16 @@
 
   </div>
 </template>
+
 <script>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router' // <--- 1. استيراد الموجه
+import { useRouter } from 'vue-router'
 import { supabase } from '../supabase'
 
 export default {
   setup() {
-    const router = useRouter() // <--- 2. تفعيل الموجه
+    const router = useRouter()
+    const registerType = ref('phone') // افتراضياً التسجيل برقم الهاتف
     const loading = ref(false)
     const message = ref('')
     const messageType = ref('')
@@ -130,6 +179,8 @@ export default {
       firstName: '',
       lastName: '',
       email: '',
+      phone: '',
+      countryCode: '+970',
       password: '',
       city: ''
     })
@@ -139,8 +190,13 @@ export default {
       message.value = ''
 
       try {
+        // توليد نفس صيغة الإيميل الموجودة في صفحة تسجيل الدخول تماماً
+        const emailToUse = registerType.value === 'email'
+          ? form.value.email
+          : `${form.value.countryCode.replace('+', '')}${form.value.phone}@jopalaqar.ps`
+
         const { data, error } = await supabase.auth.signUp({
-          email: form.value.email,
+          email: emailToUse,
           password: form.value.password,
           options: {
             data: {
@@ -156,20 +212,29 @@ export default {
         message.value = 'تم إنشاء الحساب بنجاح!'
         messageType.value = 'success'
 
-        // 3. التوجيه تلقائياً للرئيسية بعد النجاح بفترة قصيرة
         setTimeout(() => {
           router.push('/home')
         }, 1000)
 
-      } catch (err) {
-        message.value = 'حدث خطأ أثناء التسجيل: ' + err.message
-        messageType.value = 'error'
+   } catch (err) {
+        // هذا السطر سيطبع لكِ الخطأ الكامل في الـ Console، بما في ذلك رسالة Supabase التفصيلية
+        console.error("تفاصيل خطأ التسجيل من Supabase:", err); 
+        
+        message.value = 'حدث خطأ أثناء التسجيل: ' + (err.error_description || err.message);
+        messageType.value = 'error';
       } finally {
-        loading.value = false
+        loading.value = false;
       }
     }
 
-    return { form, loading, message, messageType, registerUser }
+    return { 
+      registerType,
+      form, 
+      loading, 
+      message, 
+      messageType, 
+      registerUser 
+    }
   }
 }
 </script>
