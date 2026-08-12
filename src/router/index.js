@@ -6,17 +6,18 @@ import Explore from '../components/Explore.vue'
 import SavedProperties from '../components/SavedProperties.vue'
 import MyListings from '../components/MyListings.vue'
 import Settings from '../components/Settings.vue'
+import AdminDashboard from '../components/AdminDashboard.vue'
 
 const routes = [
   {
     path: '/',
     name: 'login',
-    component: Login // أصبحت صفحة تسجيل الدخول هي الصفحة الرئيسية عند فتح التطبيق
+    component: Login
   },
   {
     path: '/home',
     name: 'home',
-    component: Home // نقلنا الصفحة الرئيسية العادية إلى هذا المسار
+    component: Home
   },
   {
     path: '/register',
@@ -42,6 +43,11 @@ const routes = [
     path: '/favorites',
     name: 'favorites',
     component: SavedProperties
+  },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminDashboard // <--- 2. إضافة المسار هنا
   }
 ]
 

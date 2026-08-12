@@ -447,17 +447,13 @@ const fetchProperties = async () => {
         let query = supabase
           .from('properties')
           .select('*')
+          .eq('status', 'approved') // <--- أضيفي هذا السطر هنا لتظهر العقارات المقبولة فقط للعامة
 
-        // سنقوم بجلب كل العقارات دون أي شروط معقدة أولاً لنرى هل الداتابيز ترد أم لا!
         const { data, error } = await query.order('id', { ascending: false })
 
         if (error) throw error
         
-        // --- ضعي هذه الطباعة لنرى ماء في جعبة الداتابيز ---
-        console.log("كل العقارات القادمة من Supabase:", data)
-        console.log("الرابط الحالي:", route.query)
-        // ------------------------------------------------
-
+        console.log("العقارات المقبولة القادمة من Supabase:", data)
         properties.value = data || []
       } catch (err) {
         console.error('خطأ في جلب العقارات:', err.message)

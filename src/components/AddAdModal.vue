@@ -343,8 +343,7 @@ export default {
     const close = () => {
       emit('update:modelValue', false)
     }
-
-    const submitForm = async () => {
+const submitForm = async () => {
       if (wizardStep.value < 4) {
         wizardStep.value++
         return
@@ -372,6 +371,11 @@ export default {
 
         const finalImageUrl = await uploadImageToSupabase()
 
+        // 1. تحديد ما إذا كان المستخدم الحالي هو الآدمن
+        const ADMIN_EMAIL = "mb837093@gmail.com"
+        const isAdmin = user.email === ADMIN_EMAIL
+
+        // 2. إرسال البيانات مع إضافة حقل الـ status
         const { error } = await supabase
           .from('properties')
           .insert([
@@ -388,13 +392,21 @@ export default {
               area: formData.area || null,
               owner: realOwnerName,       
               avatar: firstLetter,      
-              user_id: user.id          
+              user_id: user.id,          
+              // هنا الإضافة: إذا كان الآدمن (approved)، وإذا شخص آخر (pending)
+              status: isAdmin ? 'approved' : 'pending' 
             }
           ])
 
         if (error) throw error
 
-        toast.success('تم النشر بنجاح!')
+        // 3. تعديل رسالة النجاح لتناسب الحالتين
+        if (isAdmin) {
+          toast.success('تم نشر الإعلان بنجاح!')
+        } else {
+          toast.success('تم إرسال إعلانك بنجاح، وهو بانتظار موافقة الإدارة لينشر.')
+        }
+        
         close()
       } catch (err) {
         console.error('خطأ أثناء النشر:', err.message)
