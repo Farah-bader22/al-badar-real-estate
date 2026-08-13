@@ -3,14 +3,16 @@ import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     tailwindcss(),
     VitePWA({
-      registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
+      registerType: 'prompt', // <--- يضمن تحديث النسخة بشكل سليم
+      workbox: {
+        cleanupOutdatedCaches: true, // مسح الكاش القديم تلقائياً عند أي تحديث
+        skipWaiting: true
+      },
       manifest: {
         name: 'البدر العقارية',
         short_name: 'عقارات البدر',
